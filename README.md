@@ -1,5 +1,12 @@
 # HelloWorld
 
+
+How to kickstart application development
+---
+
+1. mvn archetype:generate -DarchetypeGroupId=io.dropwizard.archetypes -DarchetypeArtifactId=java-simple -DarchetypeVersion=2.0.0
+
+
 How to start the HelloWorld application
 ---
 
