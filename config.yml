@@ -4,7 +4,7 @@ defaultName: Stranger
 database:
   driverClass: org.mariadb.jdbc.Driver
   user: root
-  password:
+  password: root
   properties:
     charSet: UTF-8
     hibernate.dialect: org.hibernate.dialect.MariaDBDialect

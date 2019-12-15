@@ -25,15 +25,9 @@ public class HelloWorldResource {
 
   @Inject
   public HelloWorldResource(HelloWorldConfiguration configuration, PersonDao personDao) {
-    log.info("Injected");
     this.template = configuration.getTemplate();
     this.defaultName = configuration.getDefaultName();
     this.personDao = personDao;
-    if(personDao == null){
-      log.error("LOL");
-    }else{
-      log.info("FINE");
-    }
   }
 
   @GET
@@ -41,9 +35,6 @@ public class HelloWorldResource {
   public Saying sayHello(@QueryParam("name") Optional<String> name) {
     final String value = String.format(template, name.orElse(defaultName));
 
-    if(personDao == null){
-      log.error("Person Dao null");
-    }
     final Person savedEntity = personDao.save(
         Person.builder()
             .name(name.orElse(defaultName))

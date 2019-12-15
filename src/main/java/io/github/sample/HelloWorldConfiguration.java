@@ -18,5 +18,7 @@ public class HelloWorldConfiguration extends Configuration {
   @NotEmpty
   private String defaultName = "Stranger";
 
-  private DataSourceFactory database = new DataSourceFactory();
+  @Valid
+  @NotNull
+  private DataSourceFactory database;
 }

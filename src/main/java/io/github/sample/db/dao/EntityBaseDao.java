@@ -8,10 +8,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 @Getter
+@Setter
 public abstract class EntityBaseDao<E> extends AbstractDAO<E> {
 
   private String idName;
