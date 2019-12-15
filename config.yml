@@ -9,6 +9,19 @@ rabbitConfiguration:
   password: guest
   threadPoolSize: 128
 
+database:
+  driverClass: org.mariadb.jdbc.Driver
+  user: root
+  password:
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.MariaDBDialect
+    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: FATAL
+    hibernate.hbm2ddl.auto: update
+    hibernate.show_sql: true
+    hibernate:format_sql: true
+  url: jdbc:mysql://localhost:3306/sample?createDatabaseIfNotExist=true
+
 logging:
   level: INFO
   loggers:

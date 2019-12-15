@@ -3,12 +3,15 @@ package io.github.sample;
 import com.google.common.reflect.ClassPath;
 import com.google.inject.Stage;
 import io.dropwizard.Application;
+import io.dropwizard.db.PooledDataSourceFactory;
+import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.github.qtrouper.TrouperBundle;
 import io.github.qtrouper.core.rabbit.RabbitConfiguration;
+import io.github.sample.db.dao.DaoModule;
+import io.github.sample.db.entity.Person;
 import io.github.sample.health.TemplateHealthCheck;
-import io.github.sample.resources.HelloWorldResource;
 import java.util.Arrays;
 import java.util.List;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
@@ -19,7 +22,6 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
       "io.github.sample"
   );
 
-
   public static void main(final String[] args) throws Exception {
     new HelloWorldApplication().run(args);
   }
@@ -28,6 +30,21 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
   public String getName() {
     return "HelloWorld";
   }
+
+  private final HibernateBundle<HelloWorldConfiguration> hibernate = new HibernateBundle<HelloWorldConfiguration>(
+      Person.class) {
+
+    @Override
+    protected String name() {
+      return "HELLO-WORLD";
+    }
+
+
+    @Override
+    public PooledDataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
+      return configuration.getDatabase();
+    }
+  };
 
   @Override
   public void initialize(final Bootstrap<HelloWorldConfiguration> bootstrap) {
@@ -41,11 +58,13 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
     };
 
     bootstrap.addBundle(trouperBundle);
+    bootstrap.addBundle(hibernate);
 
     GuiceBundle<HelloWorldConfiguration> guiceBundle = GuiceBundle.<HelloWorldConfiguration>builder()
         .enableAutoConfig(getClass().getPackage().getName())
         .modules(
-            new HelloWorldModule(trouperBundle)
+            new HelloWorldModule(trouperBundle),
+            new DaoModule(hibernate)
         )
         .build(Stage.DEVELOPMENT);
 
