@@ -1,6 +1,12 @@
 # HelloWorld
 
 This application is a high-performance Hello World service. The template varies from environment to environment.
+=======
+
+How to kickstart application development
+---
+
+1. mvn archetype:generate -DarchetypeGroupId=io.dropwizard.archetypes -DarchetypeArtifactId=java-simple -DarchetypeVersion=2.0.0
 
 How to start the HelloWorld application
 ---
