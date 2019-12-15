@@ -3,6 +3,7 @@ package io.github.sample;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
+import io.github.qtrouper.core.rabbit.RabbitConfiguration;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
