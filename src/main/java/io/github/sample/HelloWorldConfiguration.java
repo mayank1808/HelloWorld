@@ -4,7 +4,6 @@ import io.dropwizard.Configuration;
 import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
