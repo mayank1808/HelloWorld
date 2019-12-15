@@ -1,5 +1,7 @@
 # HelloWorld
 
+This application is a high-performance Hello World service. The template varies from environment to environment.
+
 How to start the HelloWorld application
 ---
 

@@ -18,6 +18,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>2.0.0-rc13</dropwizard.version>
         <mainClass>io.github.sample.HelloWorldApplication</mainClass>
+        <lombok.version>1.18.0</lombok.version>
+        <lombok-maven-version>1.18.0.0</lombok-maven-version>
     </properties>
 
     <dependencyManagement>
@@ -36,8 +38,19 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
+
+
 
     <build>
         <plugins>
@@ -81,6 +94,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>${mainClass}</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                 </configuration>
@@ -113,6 +127,20 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Lombok Maven -->
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>${lombok-maven-version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
                         </goals>
                     </execution>
                 </executions>

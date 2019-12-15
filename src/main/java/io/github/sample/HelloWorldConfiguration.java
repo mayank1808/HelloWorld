@@ -1,10 +1,18 @@
 package io.github.sample;
 
 import io.dropwizard.Configuration;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class HelloWorldConfiguration extends Configuration {
-    // TODO: implement service configuration
+
+  @NotEmpty
+  private String template;
+
+  @NotEmpty
+  private String defaultName = "Stranger";
 }
