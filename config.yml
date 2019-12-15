@@ -1,6 +1,14 @@
 template: Hello, %s!
 defaultName: Stranger
 
+rabbitConfiguration:
+  brokers:
+    - host: localhost
+      port: 5672
+  userName: guest
+  password: guest
+  threadPoolSize: 128
+
 logging:
   level: INFO
   loggers:

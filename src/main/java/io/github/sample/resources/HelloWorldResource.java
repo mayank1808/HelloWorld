@@ -1,7 +1,10 @@
 package io.github.sample.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import io.github.sample.api.Saying;
+import com.google.inject.Inject;
+import io.github.sample.HelloWorldConfiguration;
+import io.github.sample.model.Saying;
+import io.github.sample.queue.util.QueueUtils;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.ws.rs.GET;
@@ -9,25 +12,37 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import lombok.extern.slf4j.Slf4j;
 
 @Path("/hello-world")
 @Produces(MediaType.APPLICATION_JSON)
+@Slf4j
 public class HelloWorldResource {
 
   private final String template;
   private final String defaultName;
   private final AtomicLong counter;
 
-  public HelloWorldResource(String template, String defaultName) {
-    this.template = template;
-    this.defaultName = defaultName;
+  @Inject
+  public HelloWorldResource(HelloWorldConfiguration configuration) {
+    this.template = configuration.getTemplate();
+    this.defaultName = configuration.getDefaultName();
     this.counter = new AtomicLong();
   }
 
   @GET
   @Timed
-  public Saying sayHello(@QueryParam("name") Optional<String> name) {
+  public Saying sayHello(@QueryParam("name") Optional<String> name) throws Exception {
     final String value = String.format(template, name.orElse(defaultName));
+
+    //checking async processing
+    try {
+      QueueUtils.queueSampleMessage(name.orElse(defaultName));
+    } catch (Exception e) {
+      log.error("Some error occured while queueing sample message");
+      throw e;
+    }
+
     return new Saying(counter.incrementAndGet(), value);
   }
 

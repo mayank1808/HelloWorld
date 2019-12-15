@@ -1,4 +1,4 @@
-package io.github.sample.api;
+package io.github.sample.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
