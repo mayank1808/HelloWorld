@@ -1,9 +1,12 @@
 package io.github.sample.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.inject.Inject;
+import io.github.sample.HelloWorldConfiguration;
 import io.github.sample.api.Saying;
+import io.github.sample.db.dao.PersonDao;
+import io.github.sample.db.entity.Person;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,19 +19,25 @@ public class HelloWorldResource {
 
   private final String template;
   private final String defaultName;
-  private final AtomicLong counter;
+  private final PersonDao personDao;
 
-  public HelloWorldResource(String template, String defaultName) {
-    this.template = template;
-    this.defaultName = defaultName;
-    this.counter = new AtomicLong();
+  @Inject
+  public HelloWorldResource(HelloWorldConfiguration configuration, PersonDao personDao) {
+    this.template = configuration.getTemplate();
+    this.defaultName = configuration.getDefaultName();
+    this.personDao = personDao;
   }
 
   @GET
   @Timed
   public Saying sayHello(@QueryParam("name") Optional<String> name) {
     final String value = String.format(template, name.orElse(defaultName));
-    return new Saying(counter.incrementAndGet(), value);
+    final Person savedEntity = personDao.save(
+        Person.builder()
+            .name(name.orElse(defaultName))
+            .build()
+    );
+    return new Saying(savedEntity.getId(), value);
   }
 
 
