@@ -19,7 +19,8 @@ public class DaoModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    //NOOP
+    bind(SessionFactory.class)
+        .toInstance(hibernateBundle.getSessionFactory());
   }
 
   @Provides

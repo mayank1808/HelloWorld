@@ -1,6 +1,5 @@
 package io.github.sample;
 
-import com.google.common.reflect.ClassPath;
 import com.google.inject.Stage;
 import io.dropwizard.Application;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -22,6 +21,19 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
       "io.github.sample"
   );
 
+  private final HibernateBundle<HelloWorldConfiguration> hibernate = new HibernateBundle<HelloWorldConfiguration>(
+      Person.class) {
+
+    @Override
+    protected String name() {
+      return "HelloWorld";
+    }
+
+    @Override
+    public PooledDataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
+      return configuration.getDatabase();
+    }
+  };
   public static void main(final String[] args) throws Exception {
     new HelloWorldApplication().run(args);
   }
@@ -30,21 +42,6 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
   public String getName() {
     return "HelloWorld";
   }
-
-  private final HibernateBundle<HelloWorldConfiguration> hibernate = new HibernateBundle<HelloWorldConfiguration>(
-      Person.class) {
-
-    @Override
-    protected String name() {
-      return "HELLO-WORLD";
-    }
-
-
-    @Override
-    public PooledDataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
-      return configuration.getDatabase();
-    }
-  };
 
   @Override
   public void initialize(final Bootstrap<HelloWorldConfiguration> bootstrap) {
@@ -74,8 +71,6 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
   @Override
   public void run(final HelloWorldConfiguration configuration,
       final Environment environment) {
-
-    environment.jersey().register(ClassPath.ResourceInfo.class);
 
     final TemplateHealthCheck healthCheck =
         new TemplateHealthCheck(configuration.getTemplate());
